@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" class="">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% block title %}ApartLux{% endblock %}</title>
+
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+}
+</script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+
+
+
+<nav class="bg-white/80 dark:bg-slate-800/80 backdrop-blur shadow-sm fixed w-full z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="text-2xl font-bold text-rose-600">ApartLux</div>
+    <div class="flex items-center gap-6">
+      <a href="{% url 'accueil' %}" class="hover:text-rose-500 transition">Accueil</a>
+      <a href="{% url 'login' %}" class="hover:text-rose-500 transition">Login</a>
+      <a href="{% url 'register' %}" class="hover:text-rose-500 transition">Register</a>
+      <button onclick="toggleTheme()" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 transition">
+        🌙 / ☀️
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+<div class="pt-24 max-w-7xl mx-auto px-4">
+  {% block content %}{% endblock %}
+</div>
+
+
+<script>
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+  localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+// Charger la préférence depuis le localStorage au chargement
+if (localStorage.theme === 'dark') {
+  document.documentElement.classList.add('dark');
+} else if (localStorage.theme === 'light') {
+  document.documentElement.classList.remove('dark');
+} else {
+  // Mode système si pas défini
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Publier un appartement{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-10">
+
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100">
+      Publier un appartement
+    </h1>
+    <p class="text-slate-500 dark:text-slate-400">
+      Renseignez les informations principales du logement
+    </p>
+  </div>
+
+  <!-- Form -->
+  <form method="post" enctype="multipart/form-data"
+        class="bg-white dark:bg-slate-800 shadow-xl rounded-2xl p-8 space-y-6">
+    {% csrf_token %}
+
+    <!-- Titre -->
+    <div>
+      <label class="block font-medium mb-1">Titre de l'annonce</label>
+      <input type="text" name="titre" required
+             class="w-full rounded-xl border px-4 py-2 focus:ring-2 focus:ring-rose-500
+                    bg-slate-50 dark:bg-slate-700">
+    </div>
+
+    <!-- Type & Quartier -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block font-medium mb-1">Type de logement</label>
+        <select name="type_logement" required
+                class="w-full rounded-xl border px-4 py-2 bg-slate-50 dark:bg-slate-700">
+          <option value="">Choisir</option>
+          <option value="Studio">Studio</option>
+          <option value="T2">T2</option>
+          <option value="T3">T3</option>
+          <option value="Villa">Villa</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-medium mb-1">Quartier</label>
+        <input type="text" name="quartier" required
+               class="w-full rounded-xl border px-4 py-2 bg-slate-50 dark:bg-slate-700">
+      </div>
+    </div>
+
+    <!-- Prix -->
+    <div>
+      <label class="block font-medium mb-1">Prix (FCFA)</label>
+      <input type="number" name="prix" required
+             class="w-full rounded-xl border px-4 py-2 bg-slate-50 dark:bg-slate-700">
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="block font-medium mb-1">Description</label>
+      <textarea name="description" rows="4"
+                class="w-full rounded-xl border px-4 py-2 bg-slate-50 dark:bg-slate-700"></textarea>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <label class="block font-medium mb-1">Contact propriétaire</label>
+      <input type="text" name="contact" required
+             class="w-full rounded-xl border px-4 py-2 bg-slate-50 dark:bg-slate-700">
+    </div>
+
+    <!-- Images -->
+    <div>
+      <label class="block font-medium mb-2">Photos du logement</label>
+
+      <!-- UX recommandée -->
+      <div class="border-2 border-dashed rounded-xl p-6 text-center
+                  hover:border-rose-500 transition">
+        <input type="file" name="images" multiple
+               class="w-full cursor-pointer">
+        <p class="text-sm text-slate-500 mt-2">
+          Ajoutez plusieurs photos (la première sera la principale)
+        </p>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="pt-6">
+      <button type="submit"
+              class="w-full md:w-auto px-8 py-3 rounded-xl bg-rose-600
+                     hover:bg-rose-700 text-white font-semibold shadow-lg">
+        Publier l'annonce
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
