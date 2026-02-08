@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Fil d’actualité{% endblock %}
+{% block content %}
+<section class="max-w-5xl mx-auto px-4">
+
+<form method="get" class="grid md:grid-cols-4 gap-4 mb-6">
+    <input type="text" name="quartier" placeholder="Quartier">
+    <select name="type">
+        <option value="">Type</option>
+        <option value="Studio">Studio</option>
+        <option value="T2">T2</option>
+        <option value="T3">T3</option>
+        <option value="Villa">Villa</option>
+    </select>
+    <input type="number" name="prix" placeholder="Prix max">
+    <button type="submit">Filtrer</button>
+</form>
+
+
+<h1 class="text-3xl font-bold mb-6">Appartements récents</h1>
+<div class="space-y-6">
+    {% for apt in apartments %}
+    {% if apt.main_image %}
+    <img src="{{ apt.main_image.image.url }}">
+    {% endif %}
+
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow">
+        <div class="flex justify-between">
+            <h2 class="text-xl font-semibold">{{ apt.titre }}</h2>
+            <span class="text-rose-600 font-bold">{{ apt.prix }} FCFA</span>
+        </div>
+        <p class="text-slate-500 mt-2">{{ apt.description|truncatewords:25 }}</p>
+    </div>
+    {% endfor %}
+</div>
+</section>
+{% endblock %}
