@@ -1,3 +1,4 @@
+import email
 from django.shortcuts import render
 from .models import User
 from .forms import RegisterForm
@@ -20,6 +21,7 @@ def login(request):
 
         if user:
             auth_login(request, user)
+            messages.success(request, "Connexion réussie !")
             return redirect('feed')
         else:
             messages.error(request, "Identifiants incorrects")
@@ -39,4 +41,10 @@ def register(request):
         form = RegisterForm()  
 
     return render(request, 'register.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('accueil')
+
 

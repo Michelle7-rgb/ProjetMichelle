@@ -1,13 +1,20 @@
 from django.shortcuts import render
 from .models import Appartement, AppartementImage
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 
 # gestion des vues pour l'application appartement
 
 #accueil
 def accueil(request):
+    # Si l'utilisateur est connecté, redirige vers le feed
+    if request.user.is_authenticated:
+        return redirect('feed')
+
+    # Sinon, affiche la page d'accueil publique
     appartements = Appartement.objects.filter(disponible=True)
-    return render(request, 'accueil.html', {'appartements':appartements})
+    return render(request, 'accueil.html', {'appartements': appartements})
+
 
 # gestion des appartements
 from django.core.exceptions import PermissionDenied
@@ -93,4 +100,41 @@ def liste_appartements(request):
     context = {
         'appartements': appartements
     }
+    return render(request, 'feed.html', context)
+
+@login_required(login_url='login')
+def feed(request):
+    """
+    Affiche la liste des appartements pour les utilisateurs connectés.
+    Permet aux propriétaires de gérer leurs appartements.
+    """
+
+    # Récupérer tous les appartements disponibles
+    appartements = Appartement.objects.filter(disponible=True)
+
+    # --- FILTRAGE ---
+    quartier = request.GET.get('quartier')
+    type_logement = request.GET.get('type')
+    prix_max = request.GET.get('prix')
+
+    if quartier:
+        appartements = appartements.filter(quartier__icontains=quartier)
+    if type_logement:
+        appartements = appartements.filter(type_logement=type_logement)
+    if prix_max:
+        try:
+            prix_max = float(prix_max)
+            appartements = appartements.filter(prix__lte=prix_max)
+        except ValueError:
+            pass  # ignore si mauvais format
+
+    # --- Gestion propriétaire ---
+    proprietaire = request.user
+    user_is_owner = hasattr(proprietaire, 'role') and proprietaire.role == 'PROPRIETAIRE'
+
+    context = {
+        'appartements': appartements,
+        'user_is_owner': user_is_owner,
+    }
+
     return render(request, 'feed.html', context)
