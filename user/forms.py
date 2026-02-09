@@ -4,7 +4,14 @@ from django.core.exceptions import ValidationError
 
 
 User = get_user_model()
+
 class RegisterForm(forms.Form):
+
+    ROLE_CHOICES = [
+        ('CLIENT', 'Je cherche un logement'),
+        ('PROPRIETAIRE', 'Je suis propriétaire'),
+    ]
+
     username = forms.CharField(
         label="Nom d'utilisateur",
         max_length=150,
@@ -42,17 +49,30 @@ class RegisterForm(forms.Form):
             "placeholder": "Numéro de téléphone"
         })
     )
+    role = forms.ChoiceField(
+        choices=ROLE_CHOICES,
+        widget=forms.RadioSelect(attrs={
+            "class": "mb-4"
+        })
+    )
     is_owner = forms.BooleanField(
         label="Êtes-vous propriétaire ?",
         required=False,
         widget=forms.CheckboxInput(attrs={"class": "mr-2"})
     )
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("Ce nom d'utilisateur est déjà pris.")
+        return username
+    
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
             raise ValidationError("Un utilisateur avec cet email existe déjà.")
         return email
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -66,7 +86,7 @@ class RegisterForm(forms.Form):
         user = User.objects.create_user(
             username=self.cleaned_data['username'],
             email=self.cleaned_data['email'],
-            password=self.cleaned_data['password']
+            password=self.cleaned_data['password'],
+            role=self.cleaned_data['role']
         )
-        # Ici tu peux sauvegarder phone ou is_owner dans ton Profile si tu en as un
         return user

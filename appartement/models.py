@@ -1,7 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-print(settings.AUTH_USER_MODEL) 
+
 
 class Appartement(models.Model):
 

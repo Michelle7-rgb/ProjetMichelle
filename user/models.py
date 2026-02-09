@@ -28,31 +28,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
-
-class Locataire(models.Model):
-    nom = models.CharField(max_length=100, blank=False)
-    telephone = models.IntegerField(max_length=10)
-    email = models.EmailField()
-    mot_de_passe = models.IntegerField()
-    photo_profil = models.ImageField(upload_to='locataires/', height_field=None, width_field=None, max_length=None)
-    date_creation = models.DateField() 
-
-    def __str__(self):
-        return self.email
-    
-class Proprietaire(models.Model):
-    nom = models.CharField(max_length=100, blank=False)
-    telephone = models.IntegerField(max_length=10)
-    email = models.EmailField()
-    mot_de_passe = models.IntegerField()
-    photo_profil = models.ImageField(upload_to='proprietaires/', height_field=None, width_field=None, max_length=None)
-    date_creation = models.DateField() 
-    type_proprietaire = models.CharField(max_length=20)
-    statut_compte = models.IntegerField()
-
-    def __str__(self):
-        return self.nom 
-    
+  
 
     
 # Create your models here.

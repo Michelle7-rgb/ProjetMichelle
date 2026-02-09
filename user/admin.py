@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Locataire
-from .models import Proprietaire
+from .models import User, Profile
 
-admin.site.register(Locataire)
-admin.site.register(Proprietaire)
+admin.site.register(User)
+admin.site.register(Profile)
 
 # Register your models here.
